@@ -72,14 +72,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "syntax_marathon" },
+      { name: "description", content: "Syntax Arena Pro is a futuristic coding typing game that sharpens your coding skills through diverse challenges." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "syntax_marathon" },
+      { property: "og:description", content: "Syntax Arena Pro is a futuristic coding typing game that sharpens your coding skills through diverse challenges." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "syntax_marathon" },
+      { name: "twitter:description", content: "Syntax Arena Pro is a futuristic coding typing game that sharpens your coding skills through diverse challenges." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/00c72da2-e78d-45bc-893b-fc1e5787865d/id-preview-5fe48adb--9d091914-dff2-409e-afc2-170764e4178f.lovable.app-1779247576798.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/00c72da2-e78d-45bc-893b-fc1e5787865d/id-preview-5fe48adb--9d091914-dff2-409e-afc2-170764e4178f.lovable.app-1779247576798.png" },
     ],
     links: [
       {
