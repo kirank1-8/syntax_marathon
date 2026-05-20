@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Syntax Marathon Ultimate Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body data-theme="dark">
+
+<div class="bg-grid"></div>
+<canvas id="particles"></canvas>
+
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-mark"></div>
+    <div>
+      <div class="brand-title">Syntax Marathon</div>
+      <div class="brand-sub">Ultimate Pro</div>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <button class="nav-item active" data-view="arena"><span class="nav-dot"></span>Arena</button>
+    <button class="nav-item" data-view="analytics"><span class="nav-dot"></span>Analytics</button>
+    <button class="nav-item" data-view="leaderboard"><span class="nav-dot"></span>Leaderboard</button>
+    <button class="nav-item" data-view="achievements"><span class="nav-dot"></span>Achievements</button>
+    <button class="nav-item" data-view="settings"><span class="nav-dot"></span>Settings</button>
+  </nav>
+
+  <div class="sidebar-foot">
+    <div class="streak-card">
+      <div class="streak-label">Daily Streak</div>
+      <div class="streak-value"><span id="dailyStreak">0</span> days</div>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="search">
+      <input id="globalSearch" placeholder="Search snippets, languages, modes..." />
+    </div>
+    <div class="topbar-actions">
+      <button class="ghost-btn" id="soundToggle" title="Sound">Sound: On</button>
+      <select id="themeSelect" class="ghost-select">
+        <option value="dark">Dark</option>
+        <option value="light">Light</option>
+        <option value="cyberpunk">Cyberpunk</option>
+        <option value="matrix">Matrix</option>
+        <option value="minimal">Minimal</option>
+      </select>
+    </div>
+  </header>
+
+  <!-- ARENA VIEW -->
+  <section class="view active" id="view-arena">
+
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Time</div><div class="stat-value" id="timer">60</div><div class="progress"><div class="bar" id="timerBar"></div></div></div>
+      <div class="stat-card"><div class="stat-label">WPM</div><div class="stat-value" id="wpm">0</div><div class="stat-sub">Raw <span id="rawWpm">0</span></div></div>
+      <div class="stat-card"><div class="stat-label">Accuracy</div><div class="stat-value"><span id="accuracy">100</span>%</div><div class="stat-sub">Errors <span id="errors">0</span></div></div>
+      <div class="stat-card"><div class="stat-label">Score</div><div class="stat-value" id="score">0</div><div class="stat-sub">x<span id="multiplier">1</span></div></div>
+      <div class="stat-card"><div class="stat-label">Combo</div><div class="stat-value" id="combo">0</div><div class="stat-sub">Max <span id="maxCombo">0</span></div></div>
+      <div class="stat-card"><div class="stat-label">Consistency</div><div class="stat-value"><span id="consistency">0</span>%</div><div class="stat-sub">Rhythm</div></div>
+    </div>
+
+    <div class="controls-row">
+      <div class="control">
+        <label>Language</label>
+        <select id="language"></select>
+      </div>
+      <div class="control">
+        <label>Difficulty</label>
+        <select id="difficulty">
+          <option value="beginner">Beginner</option>
+          <option value="intermediate" selected>Intermediate</option>
+          <option value="advanced">Advanced</option>
+          <option value="expert">Expert</option>
+          <option value="legendary">Legendary</option>
+        </select>
+      </div>
+      <div class="control">
+        <label>Mode</label>
+        <select id="mode">
+          <option value="classic">Classic</option>
+          <option value="zen">Zen</option>
+          <option value="sudden">Sudden Death</option>
+          <option value="hardcore">Hardcore</option>
+          <option value="blind">Blind</option>
+          <option value="reverse">Reverse</option>
+          <option value="marathon">Infinite Marathon</option>
+          <option value="sprint">Timed Sprint</option>
+          <option value="accuracy">Accuracy Challenge</option>
+          <option value="speedrun">Speed Run</option>
+          <option value="adaptive">AI Adaptive</option>
+        </select>
+      </div>
+      <div class="control">
+        <label>Duration</label>
+        <select id="duration">
+          <option value="30">30s</option>
+          <option value="60" selected>60s</option>
+          <option value="120">120s</option>
+          <option value="300">5 min</option>
+        </select>
+      </div>
+      <div class="control control-actions">
+        <button id="startBtn" class="primary-btn">Start</button>
+        <button id="resetBtn" class="ghost-btn">Reset</button>
+      </div>
+    </div>
+
+    <div class="active-modes" id="activeModes"></div>
+
+    <!-- IDE EDITOR -->
+    <div class="ide">
+      <div class="ide-tabs">
+        <div class="tab active"><span class="tab-icon" id="tabIcon"></span><span id="tabName">snippet.py</span><span class="tab-close">×</span></div>
+        <div class="tab muted">terminal</div>
+        <div class="ide-status">
+          <span id="ideLang">Python</span> · <span id="ideDiff">Intermediate</span> · UTF-8 · LF
+        </div>
+      </div>
+
+      <div class="ide-body">
+        <div class="line-numbers" id="lineNumbers"></div>
+        <div class="code-area">
+          <pre id="codeDisplay" class="code-display"></pre>
+          <textarea id="codeInput" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+        </div>
+      </div>
+
+      <div class="terminal">
+        <div class="terminal-head">TERMINAL</div>
+        <div class="terminal-body" id="terminalBody">
+          <div class="term-line">$ syntax-marathon --ready</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- POWERUPS + RACE -->
+    <div class="dual-grid">
+      <div class="panel">
+        <div class="panel-head">Powerups</div>
+        <div class="powerups" id="powerups"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">Live Race</div>
+        <div class="race" id="race"></div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ANALYTICS VIEW -->
+  <section class="view" id="view-analytics">
+    <div class="panel">
+      <div class="panel-head">Performance Overview</div>
+      <div class="charts-grid">
+        <div class="chart-box"><div class="chart-title">WPM History</div><canvas id="chartWpm"></canvas></div>
+        <div class="chart-box"><div class="chart-title">Accuracy</div><canvas id="chartAcc"></canvas></div>
+        <div class="chart-box"><div class="chart-title">Consistency</div><canvas id="chartCons"></canvas></div>
+        <div class="chart-box"><div class="chart-title">Language Performance</div><canvas id="chartLang"></canvas></div>
+        <div class="chart-box"><div class="chart-title">Daily Improvement</div><canvas id="chartDaily"></canvas></div>
+        <div class="chart-box"><div class="chart-title">Error Heatmap (top keys)</div><canvas id="chartHeat"></canvas></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">AI Analysis</div>
+      <div class="ai-analysis" id="aiAnalysis">Complete a round to generate analysis.</div>
+    </div>
+  </section>
+
+  <!-- LEADERBOARD VIEW -->
+  <section class="view" id="view-leaderboard">
+    <div class="panel">
+      <div class="panel-head">
+        Leaderboards
+        <div class="tabs-inline">
+          <button class="lb-tab active" data-lb="all">All Time</button>
+          <button class="lb-tab" data-lb="daily">Daily</button>
+          <button class="lb-tab" data-lb="weekly">Weekly</button>
+          <button class="lb-tab" data-lb="wpm">Top WPM</button>
+          <button class="lb-tab" data-lb="acc">Top Accuracy</button>
+        </div>
+      </div>
+      <table class="lb-table">
+        <thead><tr><th>#</th><th>Score</th><th>WPM</th><th>Accuracy</th><th>Language</th><th>Mode</th><th>Date</th></tr></thead>
+        <tbody id="leaderboardBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ACHIEVEMENTS VIEW -->
+  <section class="view" id="view-achievements">
+    <div class="panel">
+      <div class="panel-head">Achievements</div>
+      <div class="achievements-grid" id="achievementsGrid"></div>
+    </div>
+  </section>
+
+  <!-- SETTINGS VIEW -->
+  <section class="view" id="view-settings">
+    <div class="panel">
+      <div class="panel-head">Customization</div>
+      <div class="settings-grid">
+        <div class="setting"><label>Font Family</label>
+          <select id="setFont">
+            <option value="JetBrains Mono">JetBrains Mono</option>
+            <option value="Fira Code">Fira Code</option>
+            <option value="Consolas">Consolas</option>
+            <option value="Menlo">Menlo</option>
+            <option value="Inter">Inter</option>
+          </select></div>
+        <div class="setting"><label>Font Size</label>
+          <input type="range" id="setFontSize" min="12" max="22" value="15"/></div>
+        <div class="setting"><label>Cursor Style</label>
+          <select id="setCursor"><option>line</option><option>block</option><option>underline</option></select></div>
+        <div class="setting"><label>Editor Style</label>
+          <select id="setEditor"><option>vscode</option><option>monokai</option><option>solarized</option></select></div>
+        <div class="setting"><label>Background Animation</label>
+          <select id="setBg"><option>particles</option><option>grid</option><option>none</option></select></div>
+        <div class="setting"><label>Keyboard Sound</label>
+          <select id="setKbSound"><option>typewriter</option><option>mech</option><option>soft</option><option>off</option></select></div>
+        <div class="setting"><label>Accent Color</label>
+          <input type="color" id="setAccent" value="#6366f1"/></div>
+        <div class="setting"><label>Keyboard Layout</label>
+          <select id="setLayout"><option>QWERTY</option><option>DVORAK</option><option>COLEMAK</option></select></div>
+      </div>
+      <div class="settings-actions">
+        <button class="ghost-btn" id="resetData">Reset All Data</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- RESULTS MODAL -->
+<div class="modal" id="resultsModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div class="modal-title">Session Summary</div>
+      <button class="ghost-btn" id="closeModal">Close</button>
+    </div>
+    <div class="results-grid">
+      <div class="res-stat"><div class="res-label">WPM</div><div class="res-value" id="resWpm">0</div></div>
+      <div class="res-stat"><div class="res-label">Accuracy</div><div class="res-value" id="resAcc">0%</div></div>
+      <div class="res-stat"><div class="res-label">Score</div><div class="res-value" id="resScore">0</div></div>
+      <div class="res-stat"><div class="res-label">Max Combo</div><div class="res-value" id="resCombo">0</div></div>
+      <div class="res-stat"><div class="res-label">Consistency</div><div class="res-value" id="resCons">0%</div></div>
+      <div class="res-stat"><div class="res-label">Rank</div><div class="res-value" id="resRank">-</div></div>
+    </div>
+    <div class="res-chart"><canvas id="resChart"></canvas></div>
+    <div class="res-analysis" id="resAnalysis"></div>
+    <div class="res-unlocks" id="resUnlocks"></div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
